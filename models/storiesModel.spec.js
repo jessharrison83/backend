@@ -5,6 +5,21 @@ const db = require('../data/dbConfig');
 
 describe('the stories model', () => {
 
+    beforeEach( () => {
+        return db.migrate.rollback()
+            .then( () => {
+                return db.migrate.latest()
+                    .then( () => {
+                        return db.seed.run()
+                    })
+            })
+    })
+
+    afterEach(async () => {
+        await db.migrate.rollback()
+    })
+
+
     it('should fetch all the stories', async () =>{
         //return array of stories
         //fetch()
