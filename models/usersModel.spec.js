@@ -1,8 +1,6 @@
 const users = require('./usersModel');
 const db = require('../data/dbConfig');
 
-//test helper function for get user by id, get user by username, post user, put user, delete user, get user info for story post
-
 describe('the users model', () => {
 
     beforeEach( () => {
@@ -40,7 +38,7 @@ describe('the users model', () => {
 
     it('should post a new Coordinator', async () => {
         //use for adding new user in registration
-        //assuming routed directly into the app, and don't need to login
+        //user will be routed to login after successful
         const userObject = {
             username: 'froggy',
             password: 'sdgIOJgfkljesiGDOS',
