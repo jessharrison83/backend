@@ -6,7 +6,8 @@ const storyDb = require('../models/storiesModel');
 
 module.exports = server => {
     server.get('/donor/home', home);
-    server.delete('/donor/:id/delete', deleteUser);
+    server.delete('/donor/:id', deleteUser);
+    server.put('/donor/:id', editUser)
 }
 
 function home(req, res) {
@@ -14,5 +15,9 @@ function home(req, res) {
 }
 
 function deleteUser(req, res) {
+
+}
+
+function editUser(req, res) {
 
 }

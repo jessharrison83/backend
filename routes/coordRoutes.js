@@ -9,10 +9,11 @@ const storyDb = require('../models/storiesModel');
 
 module.exports = server => {
     server.get('/coord/:id/home', home);
-    server.post('/coord/:id/post', addStory);
-    server.put('/story/:id/edit', editStory);
-    server.delete('/story/:id/delete', deleteStory);
-    server.delete('/coord/:id/delete', deleteUser);
+    server.post('/coord/:id', addStory);
+    server.put('/story/:id', editStory);
+    server.delete('/story/:id', deleteStory);
+    server.delete('/coord/:id', deleteUser);
+    server.put('/coord/:id', editUser)
 }
 
 //Bolivia, Brazil, Cambodia, Colombia, Ecuador, El Salvador, Ghana, Guatemala, Haiti, Honduras, Kiribati, Madagascar, Mongolia, Nicaragua, Paraguay, Peru, Philippines, Sierra Leone, Zimbabwe
@@ -35,4 +36,8 @@ function deleteStory(req, res) {
 
 function deleteUser(req, res) {
 
+}
+
+function editUser(req, res) {
+    
 }

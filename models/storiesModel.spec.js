@@ -64,26 +64,26 @@ describe('the stories model', () => {
         expect(newStory.id).toBe(6)
     })
 
-    it('should update a story', async () =>{
-        //use for Coordinator to update a story
-        const storyObject = {
-            title: 'We want to read less',
-            country: 'Kiribati',
-            image: 'https://c1.staticflickr.com/4/3719/12644930893_b0dd6ec54e_b.jpg',
-            description: `There are many reasons.`,
-            user_id: 1
-        }
-        const updated = await stories.update(1, storyObject)
+    // it('should update a story', async () =>{
+    //     //use for Coordinator to update a story
+    //     const storyObject = {
+    //         title: 'We want to read less',
+    //         country: 'Kiribati',
+    //         image: 'https://c1.staticflickr.com/4/3719/12644930893_b0dd6ec54e_b.jpg',
+    //         description: `There are many reasons.`,
+    //         user_id: 1
+    //     }
+    //     const updated = await stories.update(1, storyObject)
 
-        expect(updated.title).toBe('We want to read less')
-        expect(updated.description).toBe(`There are many reasons.`)
-        expect(updated.id).toBe(1)
-    })
+    //     expect(updated.title).toBe('We want to read less')
+    //     expect(updated.description).toBe(`There are many reasons.`)
+    //     expect(updated.id).toBe(1)
+    // })
 
     it('should delete a story', async () =>{
         //use for Coordinator to delete a story
         const deleted = await stories.remove(5)
-        
+
         expect(deleted).toBe(1)
     })
 })

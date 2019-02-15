@@ -72,23 +72,23 @@ describe('the users model', () => {
         expect(user.id).toBe(2);
     })
 
-    it(`should update a user's information`, async () => {
-        //use to update a user's profile
-        const userObject = {
-            username: 'anabanana',
-            password: 'HEKgsdiovJDSGNei',
-            email: 'ana@filipinohearts.com',
-            role: 'Coordinator',
-            country: 'Philippines',
-            organization_title: 'Janitor'
-        }
-        const updatedUser = await users.update(3, userObject);
+    // it(`should update a user's information`, async () => {
+    //     //use to update a user's profile
+    //     const userObject = {
+    //         username: 'anabanana',
+    //         password: 'HEKgsdiovJDSGNei',
+    //         email: 'ana@filipinohearts.com',
+    //         role: 'Coordinator',
+    //         country: 'Philippines',
+    //         organization_title: 'Janitor'
+    //     }
+    //     const updatedUser = await users.update(3, userObject);
 
-        expect(updatedUser.username).toBe('anabanana');
-        expect(updatedUser.email).toBe('ana@filipinohearts.com');
-        expect(updatedUser.country).toBe('Philippines');
-        expect(updatedUser.organization_title).toBe('Janitor');
-    })
+    //     expect(updatedUser.username).toBe('anabanana');
+    //     expect(updatedUser.email).toBe('ana@filipinohearts.com');
+    //     expect(updatedUser.country).toBe('Philippines');
+    //     expect(updatedUser.organization_title).toBe('Janitor');
+    // })
 
     it('should delete a user', async () => {
         //used to remove a user's profile
