@@ -46,6 +46,7 @@ describe('the stories model', () => {
         const storyObject = {
             title: 'What is WeFunder?',
             country: 'Madagascar',
+            image: 'https://pixnio.com/free-images/people/madagascar-people-working-725x485.jpg',
             description: `We help everyone invest as little as $100 in the startups they love.  
 
             You can think of us like “Kickstarter for investing”. 
@@ -68,10 +69,11 @@ describe('the stories model', () => {
         const storyObject = {
             title: 'We want to read less',
             country: 'Kiribati',
+            image: 'https://c1.staticflickr.com/4/3719/12644930893_b0dd6ec54e_b.jpg',
             description: `There are many reasons.`,
             user_id: 1
         }
-        const updated = await stories.update(1)
+        const updated = await stories.update(1, storyObject)
 
         expect(updated.title).toBe('We want to read less')
         expect(updated.description).toBe(`There are many reasons.`)
