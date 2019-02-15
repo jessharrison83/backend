@@ -83,7 +83,7 @@ describe('the stories model', () => {
     it('should delete a story', async () =>{
         //use for Coordinator to delete a story
         const deleted = await stories.remove(5)
-
+        
         expect(deleted).toBe(1)
     })
 })

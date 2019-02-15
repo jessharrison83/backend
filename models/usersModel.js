@@ -2,13 +2,16 @@ const db = require('../data/dbConfig');
 require('events').EventEmitter.defaultMaxListeners = 0;
 
 const fetch = (id) => {
-    return db('users').where('id', id).first()
+    return db('users').where('id', id)
+        .then(user => {
+            return user[0]
+        })
 }
 
 const fetchCountry = (id) => {
     return db('users').where('id', id)
         .then(user => {
-            return user.country
+            return user[0].country
         })
 }
 

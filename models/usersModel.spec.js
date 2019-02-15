@@ -33,7 +33,7 @@ describe('the users model', () => {
         //use for providing country on new post
         const country = await users.fetchCountry(1)
 
-        expect(country.country).toBe('Kiribati')
+        expect(country).toBe('Kiribati')
     })
 
     it('should post a new Coordinator', async () => {
@@ -47,7 +47,7 @@ describe('the users model', () => {
             country: 'Guatemala',
             organization_title: 'Top Frog'
         }
-        const newUser = await register(userObject)
+        const newUser = await users.register(userObject)
 
         expect(newUser.id).toBe(7)
     })
@@ -59,7 +59,7 @@ describe('the users model', () => {
             email: 'chickenzrul@gmail.com',
             role: 'Donor'
         }
-        const newUser = await register(userObject)
+        const newUser = await users.register(userObject)
 
         expect(newUser.id).toBe(7)
     })
@@ -93,10 +93,8 @@ describe('the users model', () => {
     it('should delete a user', async () => {
         //used to remove a user's profile
         const deleted = await users.remove(4)
-        const remaining = await users.fetch()
 
         expect(deleted).toBe(1)
-        expect(remaining.length).toBe(6)
     })
 
 })
