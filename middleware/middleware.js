@@ -12,10 +12,11 @@ const jwtKey = process.env.JWT_SECRET || `add a .env file to the root of the pro
 //     next();
 // }
 
-generateToken = (username, role) => {
+generateToken = (username, id, role) => {
     const payload = {
         username: username,
-        role: role
+        role: role,
+        user_id: id,
     }
 
     const options = {
@@ -49,11 +50,7 @@ checkRegistrationFields = (req, res, next) => {
         return res.status(400).json({
             message: "Username cannot be longer than 100 characters."
         })
-    } else if (user.organization_title.length > 100){
-        return res.status(400).json({
-            message: "Organization title cannot be longer than 100 characters."
-        })
-    } 
+    }
 
     if(user.username && user.password && user.email && user.role){
         next();
@@ -82,25 +79,25 @@ checkRegistrationFields = (req, res, next) => {
 
 assignImage = (country) => {
     let images = {
-        Bolivia: "https://drive.google.com/open?id=1aMuMlXFFFxePgGCsUpye67mudLM_8tl7",
-        Brazil: "https://drive.google.com/open?id=1TrHE-f1i4AvBZazKANZ4xH63wdsDmErc",
-        Cambodia: "https://drive.google.com/open?id=12wcbodtfxIqarMxZeJJ0X9y1IwzaOgcP",
-        Colombia: "https://drive.google.com/open?id=17L-m2nsU2MXGn3Qomfno-gfJR0UaHWRL",
-        Ecuador: "https://drive.google.com/open?id=1QIuAhrGzy6c5ceh8A3xXQNBVRG92Doph",
-        El_Salvador: "https://drive.google.com/open?id=1Buf2DFCuHFxnLV2SK_pkbEwdVRFPZ_kn",
-        Ghana: "https://drive.google.com/open?id=1AGgnB4JaAJC1V7s01OJ6MxEqlq9Hcrdt",
-        Guatemala: "https://drive.google.com/open?id=1k-bXKtJrT64P86KYpJvlH1MJa_Nc6bnE",
-        Haiti: "https://drive.google.com/open?id=1vaQQVZoKEpgGRi9ZNpkQYQwOEEhh8od-",
-        Honduras: "https://drive.google.com/open?id=1lyCwxFDtlgZdLh_7bxQLC115qYmX3pfE",
-        Kiribati: "https://upload.wikimedia.org/wikipedia/commons/9/93/GoldenGateBridge_BakerBeach_MC.jpg",
+        Bolivia: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Bolivia.jpg",
+        Brazil: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Brazil.jpg",
+        Cambodia: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Cambodia.jpg",
+        Colombia: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Colombia.jpg",
+        Ecuador: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Ecuador.jpg",
+        El_Salvador: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/El_Salvador.jpg",
+        Ghana: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Ghana.jpg",
+        Guatemala: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Guatemala.jpg",
+        Haiti: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Haiti.jpg",
+        Honduras: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Honduras.jpg",
+        Kiribati: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Kiribati.jpg",
         Madagascar: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Madagascar.jpg",
-        Mongolia: "https://drive.google.com/open?id=1cIkuyE9Jpp1OcF-bBarIv5Er4Vek-JIA",
-        Nicaragua: "https://drive.google.com/open?id=19kJvvpf6pWGGNjh_xgaFH9lBx8aMbKaE",
-        Paraguay: "https://drive.google.com/open?id=1GpAAzecZlmS2b2s-xEaYJasSVfdaxIIO",
+        Mongolia: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Mongolia.jpg",
+        Nicaragua: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Nicaragua.jpg",
+        Paraguay: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Paraguay.jpg",
         Peru: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Peru.jpg",
-        Philippines: "https://drive.google.com/open?id=1_IL8-PO-NwMome1zzP_4sBgVyOEHaWCc",
-        Sierra_Leone: "https://drive.google.com/open?id=1RI1kI5zgNavStGIClzLJ4S8gr2ULlh-y",
-        Zimbabwe: "https://drive.google.com/open?id=1FdtRvySOD9LgiC724ERv6I3X1mTwbJi-"
+        Philippines: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Philippines.jpg",
+        Sierra_Leone: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Sierra_Leone.jpg",
+        Zimbabwe: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Zimbabwe.jpg"
     }
 
     return images[country]
@@ -160,7 +157,7 @@ checkStoryFields = (req, res, next) => {
     }
 }
 
-passwordProection = (password) => {
+passwordProtection = (password) => {
     if(password.length > 11){
         hashed = bcrypt.hashSync(password, 12);
         return hashed;
@@ -183,5 +180,5 @@ loginCheck = (req, res, next) => {
 }
 
 module.exports = {
-    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken,
+    checkRegistrationFields, checkStoryFields, passwordProtection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken,
 }
