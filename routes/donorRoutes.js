@@ -20,8 +20,6 @@ function home(req, res) {
         })
 }
 
-//middleware to check IF user exists
-
 function userProfile(req, res) {
     const {id} = req.params;
 

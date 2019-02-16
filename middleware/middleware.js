@@ -96,7 +96,13 @@ checkIfUser = (req, res, next) => {
 
 checkStoryFields = (req, res, next) => {
     const story = req.body;
-    //title, description
+
+    if(story.title.length > 250){
+        return res.status(400).json({
+            message: "Story title cannot be longer than 250 characters."
+        })
+    }
+
     if(story.title && story.description){
         next();
     } else if(story.title){

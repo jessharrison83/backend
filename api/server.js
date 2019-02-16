@@ -19,6 +19,3 @@ configAuthRoutes(server);
 module.exports = {
   server,
 };
-
-//store a string image for each country's image hosted elsewhere
-//then Xavier can map over it
