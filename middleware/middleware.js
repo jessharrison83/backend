@@ -98,10 +98,10 @@ assignImage = (country) => {
         Honduras: "https://drive.google.com/open?id=1lyCwxFDtlgZdLh_7bxQLC115qYmX3pfE",
         Kiribati: "https://upload.wikimedia.org/wikipedia/commons/9/93/GoldenGateBridge_BakerBeach_MC.jpg",
         Madagascar: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Madagascar.jpg",
-        Mongolia: "https://upload.wikimedia.org/wikipedia/commons/9/93/GoldenGateBridge_BakerBeach_MC.jpg",
+        Mongolia: "https://drive.google.com/open?id=1cIkuyE9Jpp1OcF-bBarIv5Er4Vek-JIA",
         Nicaragua: "https://drive.google.com/open?id=19kJvvpf6pWGGNjh_xgaFH9lBx8aMbKaE",
         Paraguay: "https://drive.google.com/open?id=1GpAAzecZlmS2b2s-xEaYJasSVfdaxIIO",
-        Peru: "https://upload.wikimedia.org/wikipedia/commons/9/93/GoldenGateBridge_BakerBeach_MC.jpg",
+        Peru: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Peru.jpg",
         Philippines: "https://drive.google.com/open?id=1_IL8-PO-NwMome1zzP_4sBgVyOEHaWCc",
         Sierra_Leone: "https://drive.google.com/open?id=1RI1kI5zgNavStGIClzLJ4S8gr2ULlh-y",
         Zimbabwe: "https://drive.google.com/open?id=1FdtRvySOD9LgiC724ERv6I3X1mTwbJi-"

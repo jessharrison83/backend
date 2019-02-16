@@ -12,9 +12,9 @@ const server = express();
 
 server.use(helmet());
 // server.options('*', cors())
-server.use(cors);
+// server.use(cors);
 server.use(bodyParser.json());
-server.use(express.json());
+server.use(express.json(), cors);
 
 configDonorRoutes(server);
 configCoordRoutes(server);
