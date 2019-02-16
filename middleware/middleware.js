@@ -1,6 +1,20 @@
 const bcrypt = require('bcryptjs');
 const userDb = require('../models/usersModel');
+const jwt = require('jsonwebtoken');
 
+const jwtKey = process.env.JWT_SECRET || `add a .env file to the root of the project with a JWT_SECRET variable`;
+
+module.exports = {
+    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken
+}
+
+authenticate = () => {
+
+}
+
+generateToken = () => {
+
+}
 
 checkRegistrationFields = (req, res, next) => {
     const user = req.body;
@@ -52,12 +66,12 @@ assignImage = (country) => {
         Guatemala: "https://drive.google.com/open?id=1k-bXKtJrT64P86KYpJvlH1MJa_Nc6bnE",
         Haiti: "https://drive.google.com/open?id=1vaQQVZoKEpgGRi9ZNpkQYQwOEEhh8od-",
         Honduras: "https://drive.google.com/open?id=1lyCwxFDtlgZdLh_7bxQLC115qYmX3pfE",
-        Kiribati: "https://drive.google.com/open?id=1MjfLSz9N0DE2lzn-Lrkd_btMx0LqZknA",
-        Madagascar: "https://drive.google.com/open?id=15ef_zSCaDluIucYxFnzxqNIZ00Xl9QNO",
+        Kiribati: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Kiribati.jpg",
+        Madagascar: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Madagascar.jpg",
         Mongolia: "https://drive.google.com/open?id=1cIkuyE9Jpp1OcF-bBarIv5Er4Vek-JIA",
         Nicaragua: "https://drive.google.com/open?id=19kJvvpf6pWGGNjh_xgaFH9lBx8aMbKaE",
         Paraguay: "https://drive.google.com/open?id=1GpAAzecZlmS2b2s-xEaYJasSVfdaxIIO",
-        Peru: "https://drive.google.com/open?id=1uV30_SQH-gqUhT1ulPBoitxHvARMP79z",
+        Peru: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Peru.jpg",
         Philippines: "https://drive.google.com/open?id=1_IL8-PO-NwMome1zzP_4sBgVyOEHaWCc",
         Sierra_Leone: "https://drive.google.com/open?id=1RI1kI5zgNavStGIClzLJ4S8gr2ULlh-y",
         Zimbabwe: "https://drive.google.com/open?id=1FdtRvySOD9LgiC724ERv6I3X1mTwbJi-"
@@ -143,6 +157,3 @@ loginCheck = (req, res, next) => {
 }
 
 
-module.exports = {
-    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser
-}
