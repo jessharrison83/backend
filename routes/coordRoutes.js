@@ -17,8 +17,6 @@ module.exports = server => {
     server.delete('/story/:id', deleteStory);
 }
 
-//Bolivia, Brazil, Cambodia, Colombia, Ecuador, El Salvador, Ghana, Guatemala, Haiti, Honduras, Kiribati, Madagascar, Mongolia, Nicaragua, Paraguay, Peru, Philippines, Sierra Leone, Zimbabwe
-
 function home(req, res) {
     const {id} = req.params;
 
