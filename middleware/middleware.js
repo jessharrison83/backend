@@ -4,17 +4,13 @@ const jwt = require('jsonwebtoken');
 
 const jwtKey = process.env.JWT_SECRET || `add a .env file to the root of the project with a JWT_SECRET variable`;
 
-module.exports = {
-    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken, cors
-}
-
-cors = (req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-}
+// cors = (req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Credentials', true);
+//     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type');
+//     next();
+// }
 
 generateToken = (username, role) => {
     const payload = {
@@ -186,4 +182,6 @@ loginCheck = (req, res, next) => {
     }
 }
 
-
+module.exports = {
+    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken,
+}
