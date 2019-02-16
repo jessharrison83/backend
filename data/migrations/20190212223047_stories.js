@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
       table.string('country').notNullable();
       table.string('description').notNullable();
       table.string('updated_at').notNullable().defaultTo(knex.fn.now());
+      table.string('image').notNullable();
       table.integer('user_id').unsigned();
       table.foreign('user_id').references('id').on('users');
   })
