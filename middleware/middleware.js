@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const userDb = require('../models/usersModel');
 
 
-
 checkRegistrationFields = (req, res, next) => {
     const user = req.body;
     //username, password, email, role 
@@ -10,11 +9,11 @@ checkRegistrationFields = (req, res, next) => {
         next();
     } else if(!user.username){
         return res.status(400).json({
-            message: "New accounts require a password!"
+            message: "New accounts require a username!"
         })
     } else if(!user.password){
         return res.status(400).json({
-            message: "New accounts require a username!"
+            message: "New accounts require a password!"
         })
     } else if(!user.email){
         return res.status(400).json({
@@ -31,12 +30,7 @@ checkRegistrationFields = (req, res, next) => {
     }
 }
 
-//middleware to check country of user id, and assign county and country image to new story based on it
-
-//Bolivia, Brazil, Cambodia, Colombia, Ecuador, El Salvador, Ghana, Guatemala, Haiti, Honduras, Kiribati, Madagascar, Mongolia, Nicaragua, Paraguay, Peru, Philippines, Sierra Leone, Zimbabwe
-
-
-assignImage = (id) => {
+assignImage = (country) => {
     let images = {
         Bolivia: "",
         Brazil: "",
@@ -44,7 +38,7 @@ assignImage = (id) => {
         Colombia: "",
         Ecuador: "",
         El_Salvador: "",
-        Ghana: "",
+        Ghana: "YES",
         Guatemala: "",
         Haiti: "",
         Honduras: "",
@@ -58,16 +52,17 @@ assignImage = (id) => {
         Sierra_Leone: "",
         Zimbabwe: ""
     }
+
+    return images[country]
 }
 
-assignCountry = (req, res, next) => {
-    const {id} = req.params;
+async function assignCountry(id) {
+    const countryString = await userDb.fetchCountry(id)
+    const imageurl = assignImage(countryString)
 
-    userDb.fetchCountry(id)
-    
+    return {country: countryString, image: imageurl}
 }
 
-//middleware to check if(user), returns user if yes
 
 checkIfUser = (req, res, next) => {
     const {id} = req.params;
@@ -75,12 +70,17 @@ checkIfUser = (req, res, next) => {
     userDb.fetch(id)
     .then(user => {
         if(user){
-            return user
+            return res.json(user)
         } else {
             return res.status(404).json({
                 message: "This user does not exist."
             })
         }
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: "This user could not be fetched."
+        })
     })
 }
 
@@ -91,15 +91,15 @@ checkStoryFields = (req, res, next) => {
         next();
     } else if(story.title){
         return res.status(400).json({
-            message: "New stories require a description!"
+            message: "Stories require a description!"
         })
     } else if(story.description){
         return res.status(400).json({
-            message: "New stories require a title!"
+            message: "Stories require a title!"
         })
     } else{
         return res.status(400).json({
-            message: "New stories require a title and description!"
+            message: "Stories require a title and description!"
         })
     }
 }
@@ -128,5 +128,5 @@ loginCheck = (req, res, next) => {
 
 
 module.exports = {
-    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck
+    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser
 }
