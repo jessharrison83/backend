@@ -17,3 +17,5 @@ function register(req, res) {
 function login(req, res) {
 
 }
+
+//home get sanity route, display a message so they know it's running
