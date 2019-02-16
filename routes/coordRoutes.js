@@ -195,12 +195,3 @@ function deleteStory(req, res) {
         })
 
 }
-
-server.get('/coord/:id/home') //fetches that coordinator's array of their own stories
-server.get('/coord/:id') //fetches that coordinator's profile info
-server.put('/coord/:id') //updates that coordinator's profile info
-server.delete('/coord/:id') //deletes that coordinator's profile
-server.get('/story/:id') //fetches that story by its id
-server.post('/coord/:id') //add a new story by the coordinator's id
-server.put('/story/:id') //updates that story by its id
-server.delete('/story/:id') //deletes that story by its id
