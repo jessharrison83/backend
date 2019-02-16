@@ -5,15 +5,45 @@ const jwt = require('jsonwebtoken');
 const jwtKey = process.env.JWT_SECRET || `add a .env file to the root of the project with a JWT_SECRET variable`;
 
 module.exports = {
-    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken
+    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken, cors
 }
 
-authenticate = () => {
-
+cors = (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
 }
 
-generateToken = () => {
+generateToken = (username, role) => {
+    const payload = {
+        username: username,
+        role: role
+    }
 
+    const options = {
+        expiresIn: '3h'
+    }
+
+    return jwt.sign(payload, jwtKey, options)
+}
+
+authenticate = (req, res, next) => {
+    const token = req.get('Authorization');
+
+    if(token){
+        jwt.verify(token, jwtKey, (err, decoded) => {
+            if(err) return res.status(401).json(err);
+
+            req.decoded = decoded;
+            next();
+        })
+    } else {
+        return res.status(401).json({
+            error: "No token provided on the Authorization header"
+        })
+    }
 }
 
 checkRegistrationFields = (req, res, next) => {
