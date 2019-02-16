@@ -1,9 +1,6 @@
 const userDb = require('../models/usersModel');
 const storyDb = require('../models/storiesModel');
 
-//HOME: donor get stories
-//DELETE: donor delete profile by user id
-
 module.exports = server => {
     server.get('/donor/home', home);
     server.get('/donor/:id', userProfile);
