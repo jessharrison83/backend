@@ -77,27 +77,86 @@ checkRegistrationFields = (req, res, next) => {
     }
 }
 
+
+//assign a large image and small image in object
 assignImage = (country) => {
     let images = {
-        Bolivia: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Bolivia.jpg",
-        Brazil: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Brazil.jpg",
-        Cambodia: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Cambodia.jpg",
-        Colombia: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Colombia.jpg",
-        Ecuador: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Ecuador.jpg",
-        El_Salvador: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/El_Salvador.jpg",
-        Ghana: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Ghana.jpg",
-        Guatemala: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Guatemala.jpg",
-        Haiti: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Haiti.jpg",
-        Honduras: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Honduras.jpg",
-        Kiribati: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Kiribati.jpg",
-        Madagascar: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Madagascar.jpg",
-        Mongolia: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Mongolia.jpg",
-        Nicaragua: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Nicaragua.jpg",
-        Paraguay: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Paraguay.jpg",
-        Peru: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Peru.jpg",
-        Philippines: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Philippines.jpg",
-        Sierra_Leone: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Sierra_Leone.jpg",
-        Zimbabwe: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Zimbabwe.jpg"
+        Bolivia: { 
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Bolivia.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/Bolivia.jpg"
+        },
+        Brazil: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Brazil.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/Brazil.jpg"
+        },
+        Cambodia: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Cambodia.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Cambodia.jpg"
+        },
+        Colombia: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Colombia.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Colombia.jpg"
+        },
+        Ecuador: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Ecuador.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Ecuador.jpg"
+        },
+        El_Salvador: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/El_Salvador.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/El_Salvador.jpg"
+        },
+        Ghana: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Ghana.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/Ghana.jpg"
+        },
+        Guatemala: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Guatemala.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Guatemala.jpg"
+        },
+        Haiti: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Haiti.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Haiti.jpg"
+        },
+        Honduras: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Honduras.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Honduras.jpg"
+        },
+        Kiribati: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Kiribati.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438987/Large%20Bountiful/Kiribati.jpg"
+        },
+        Madagascar: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Madagascar.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Madagascar.jpg"
+        },
+        Mongolia: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Mongolia.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/Mongolia.jpg"
+        },
+        Nicaragua: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Nicaragua.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Nicaragua.jpg"
+        },
+        Paraguay: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Paraguay.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Paraguay.jpg"
+        },
+        Peru: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Peru.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Peru.jpg"
+        },
+        Philippines: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Philippines.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Philippines.jpg"
+        },
+        Sierra_Leone: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Sierra_Leone.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438987/Large%20Bountiful/Sierra_Leone.jpg"
+        },
+        Zimbabwe: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Zimbabwe.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438992/Large%20Bountiful/Zimbabwe.jpg"
+        }
     }
 
     return images[country]
@@ -105,9 +164,9 @@ assignImage = (country) => {
 
 async function assignCountry(id) {
     const countryString = await userDb.fetchCountry(id)
-    const imageurl = assignImage(countryString)
+    const imageObj = assignImage(countryString)
 
-    return {country: countryString, image: imageurl}
+    return {country: countryString, image: imageObj}
 }
 
 
