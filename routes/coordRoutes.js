@@ -8,7 +8,7 @@ module.exports = server => {
     server.put('/coord/:id', checkRegistrationFields, editUser);
     server.delete('/coord/:id', deleteUser);
     server.get('/story/:id', story);
-    server.post('/coord/:id', checkStoryFields, addStory);
+    server.post('/coord/:id', checkStoryFields, checkIfUser, addStory);
     server.put('/story/:id', checkStoryFields, editStory);
     server.delete('/story/:id', deleteStory);
 }
@@ -125,7 +125,8 @@ function addStory(req, res) {
                 title: story.title,
                 description: story.description,
                 country: response.country,
-                image: response.image,
+                small_image: response.small_image,
+                large_image: response.large_image,
                 user_id: id
             }
             storyDb.add(newPost)

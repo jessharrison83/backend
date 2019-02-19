@@ -166,7 +166,10 @@ async function assignCountry(id) {
     const countryString = await userDb.fetchCountry(id)
     const imageObj = assignImage(countryString)
 
-    return {country: countryString, image: imageObj}
+    return {
+        country: countryString, 
+        small_image: imageObj.small, 
+        large_image: imageObj.large}
 }
 
 
