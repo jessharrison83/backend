@@ -217,7 +217,7 @@ checkIfUser = (req, res, next) => {
     userDb.fetch(id)
     .then(user => {
         if(user){
-            return res.json(user)
+            next()
         } else {
             return res.status(404).json({
                 message: "This user does not exist."

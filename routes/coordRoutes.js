@@ -28,7 +28,16 @@ function home(req, res) {
 }
 
 function userProfile(req, res) {
-    return req.body
+    const {id} = req.params;
+    userDb.fetch(id)
+        .then(user =>{
+            return res.json(user)
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "This user could not be fetched"
+            })
+        })
 }
 
 function editUser(req, res) {
@@ -116,32 +125,33 @@ function story(req, res) {
 }
 
 function addStory(req, res) {
-    const {id} = req.params;
-    const story = req.body;
+    console.log('req', req.body, 'res', res)
+    // const {id} = req.params;
+    // const story = req.body;
 
-    assignCountry(id, res)
-        .then(response => {
-            const newPost = {
-                title: story.title,
-                description: story.description,
-                country: response.country,
-                small_image: response.small_image,
-                large_image: response.large_image,
-                user_id: id
-            }
-            storyDb.add(newPost)
-                .then(story => {
-                    res.status(201).json(story)
-                })
-                .catch(err => {
-                    res.status(500).json({
-                        message: "Unable to add story."
-                    })
-                })
-        })
-        .catch(err => {
-            res.status(401).json(err)
-        })
+    // assignCountry(id, res)
+    //     .then(response => {
+    //         const newPost = {
+    //             title: story.title,
+    //             description: story.description,
+    //             country: response.country,
+    //             small_image: response.small_image,
+    //             large_image: response.large_image,
+    //             user_id: id
+    //         }
+    //         storyDb.add(newPost)
+    //             .then(story => {
+    //                 res.status(201).json(story)
+    //             })
+    //             .catch(err => {
+    //                 res.status(500).json({
+    //                     message: "Unable to add story."
+    //                 })
+    //             })
+    //     })
+    //     .catch(err => {
+    //         res.status(401).json(err)
+    //     })
 }
 
 function editStory(req, res) {
