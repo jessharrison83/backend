@@ -4,13 +4,30 @@ const jwt = require('jsonwebtoken');
 
 const jwtKey = process.env.JWT_SECRET || `add a .env file to the root of the project with a JWT_SECRET variable`;
 
-// cors = (req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Credentials', true);
-//     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     next();
-// }
+
+//AUTHENTICATION
+
+passwordProtection = (password, res) => {
+    if(password.length > 11){
+        hashed = bcrypt.hashSync(password, 12);
+        return hashed;
+    } else {
+        return res.status(401).json({
+            message: "Password must be at least 12 characters long."
+        })
+    }
+}
+
+loginCheck = (req, res, next) => {
+    const user = req.body;
+    if(user.username && user.password){
+        next();
+    } else {
+        res.status(400).json({
+            message: "Invalid username or password."
+        })
+    }
+}
 
 generateToken = (username, id, role) => {
     const payload = {
@@ -78,6 +95,9 @@ verifyUser = (req, res, next) => {
     })
 }
 
+
+//FIELD CHECKING
+
 checkRegistrationFields = (req, res, next) => {
     const user = req.body;
 
@@ -113,7 +133,34 @@ checkRegistrationFields = (req, res, next) => {
 }
 
 
-//assign a large image and small image in object
+checkStoryFields = (req, res, next) => {
+    const story = req.body;
+    
+    if(story.title && story.description){
+        if(story.title.length > 250){
+            return res.status(400).json({
+                message: "Story title cannot be longer than 250 characters."
+            })
+        }
+        next();
+    } else if(!story.title){
+        return res.status(400).json({
+            message: "Stories require a title!"
+        })
+    } else if(!story.description){
+        return res.status(400).json({
+            message: "Stories require a description!"
+        })
+    } else{
+        return res.status(400).json({
+            message: "Stories require a title and description!"
+        })
+    }
+}
+
+
+//ASSIGN COUNTRY FIELD AND IMAGES
+
 assignImage = (country) => {
     let images = {
         Bolivia: { 
@@ -211,6 +258,8 @@ async function assignCountry(id, res) {
 }
 
 
+//VERIFY USER EXISTS
+
 checkIfUser = (req, res, next) => {
     const {id} = req.params;
 
@@ -229,53 +278,6 @@ checkIfUser = (req, res, next) => {
             message: "This user could not be fetched."
         })
     })
-}
-
-checkStoryFields = (req, res, next) => {
-    const story = req.body;
-    
-    if(story.title && story.description){
-        if(story.title.length > 250){
-            return res.status(400).json({
-                message: "Story title cannot be longer than 250 characters."
-            })
-        }
-        next();
-    } else if(!story.title){
-        return res.status(400).json({
-            message: "Stories require a title!"
-        })
-    } else if(!story.description){
-        return res.status(400).json({
-            message: "Stories require a description!"
-        })
-    } else{
-        return res.status(400).json({
-            message: "Stories require a title and description!"
-        })
-    }
-}
-
-passwordProtection = (password, res) => {
-    if(password.length > 11){
-        hashed = bcrypt.hashSync(password, 12);
-        return hashed;
-    } else {
-        return res.status(401).json({
-            message: "Password must be at least 12 characters long."
-        })
-    }
-}
-
-loginCheck = (req, res, next) => {
-    const user = req.body;
-    if(user.username && user.password){
-        next();
-    } else {
-        res.status(400).json({
-            message: "Invalid username or password."
-        })
-    }
 }
 
 module.exports = {
