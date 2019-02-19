@@ -1,16 +1,16 @@
 const userDb = require('../models/usersModel');
 const storyDb = require('../models/storiesModel');
-const { checkIfUser, assignCountry, checkStoryFields, checkRegistrationFields } = require('../middleware/middleware');
+const { checkIfUser, assignCountry, checkStoryFields, verifyUser, authenticate, coordAuth, checkRegistrationFields } = require('../middleware/middleware');
 
 module.exports = server => {
-    server.get('/coord/:id/home', home);
-    server.get('/coord/:id', checkIfUser, userProfile);
-    server.put('/coord/:id', checkRegistrationFields, editUser);
-    server.delete('/coord/:id', deleteUser);
-    server.get('/story/:id', story);
-    server.post('/coord/:id', checkStoryFields, checkIfUser, addStory);
-    server.put('/story/:id', checkStoryFields, editStory);
-    server.delete('/story/:id', deleteStory);
+    server.get('/coord/:id/home', authenticate, coordAuth, home);
+    server.get('/coord/:id', coordAuth, verifyUser, checkIfUser, userProfile);
+    server.put('/coord/:id', coordAuth, verifyUser, checkRegistrationFields, editUser);
+    server.delete('/coord/:id', coordAuth, verifyUser, deleteUser);
+    server.get('/story/:id', authenticate, story);
+    server.post('/coord/:id', verifyUser, coordAuth, checkStoryFields, checkIfUser, addStory);
+    server.put('/story/:id', verifyUser, coordAuth, checkStoryFields, editStory);
+    server.delete('/story/:id', verifyUser, coordAuth, deleteStory);
 }
 
 function home(req, res) {
@@ -119,7 +119,7 @@ function addStory(req, res) {
     const {id} = req.params;
     const story = req.body;
 
-    assignCountry(id)
+    assignCountry(id, res)
         .then(response => {
             const newPost = {
                 title: story.title,
@@ -138,6 +138,9 @@ function addStory(req, res) {
                         message: "Unable to add story."
                     })
                 })
+        })
+        .catch(err => {
+            res.status(401).json(err)
         })
 }
 

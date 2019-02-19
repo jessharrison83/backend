@@ -43,6 +43,41 @@ authenticate = (req, res, next) => {
     }
 }
 
+coordAuth = (req, res, next) => {
+    const token = req.get('Authorization');
+    jwt.verify(token, jwtKey, (err, success) => {
+        if(err){
+            return res.status(401).json(err)
+        } else {
+            if(success.role === "Coordinator"){
+                next();
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized request - only Coordinators can access this page."
+                })
+            }
+        }
+    })
+}
+
+verifyUser = (req, res, next) => {
+    const token = req.get('Authorization');
+    const {id} = req.params;
+    jwt.verify(token, jwtKey, (err, success) => {
+        if(err){
+            return res.status(401).json(err)
+        } else {
+            if(success.user_id == id){
+                next();
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized request - users can only edit their own account."
+                })
+            }
+        }
+    })
+}
+
 checkRegistrationFields = (req, res, next) => {
     const user = req.body;
 
@@ -158,14 +193,17 @@ assignImage = (country) => {
             large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438992/Large%20Bountiful/Zimbabwe.jpg"
         }
     }
-
     return images[country]
 }
 
-async function assignCountry(id) {
+async function assignCountry(id, res) {
     const countryString = await userDb.fetchCountry(id)
+    if(!countryString){
+        return res.status(401).json({
+            message: "This user does not have an assigned country, so cannot post stories."
+        })
+    }
     const imageObj = assignImage(countryString)
-
     return {
         country: countryString, 
         small_image: imageObj.small, 
@@ -195,22 +233,21 @@ checkIfUser = (req, res, next) => {
 
 checkStoryFields = (req, res, next) => {
     const story = req.body;
-
-    if(story.title.length > 250){
-        return res.status(400).json({
-            message: "Story title cannot be longer than 250 characters."
-        })
-    }
-
+    
     if(story.title && story.description){
+        if(story.title.length > 250){
+            return res.status(400).json({
+                message: "Story title cannot be longer than 250 characters."
+            })
+        }
         next();
-    } else if(story.title){
-        return res.status(400).json({
-            message: "Stories require a description!"
-        })
-    } else if(story.description){
+    } else if(!story.title){
         return res.status(400).json({
             message: "Stories require a title!"
+        })
+    } else if(!story.description){
+        return res.status(400).json({
+            message: "Stories require a description!"
         })
     } else{
         return res.status(400).json({
@@ -219,12 +256,12 @@ checkStoryFields = (req, res, next) => {
     }
 }
 
-passwordProtection = (password) => {
+passwordProtection = (password, res) => {
     if(password.length > 11){
         hashed = bcrypt.hashSync(password, 12);
         return hashed;
     } else {
-        return res.status(400).json({
+        return res.status(401).json({
             message: "Password must be at least 12 characters long."
         })
     }
@@ -242,5 +279,5 @@ loginCheck = (req, res, next) => {
 }
 
 module.exports = {
-    checkRegistrationFields, checkStoryFields, passwordProtection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken,
+    checkRegistrationFields, checkStoryFields, passwordProtection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken, coordAuth, verifyUser
 }

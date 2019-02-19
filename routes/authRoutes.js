@@ -1,6 +1,7 @@
 const userDb = require('../models/usersModel');
 const storyDb = require('../models/storiesModel');
 const bcrypt = require('bcryptjs');
+
 const { passwordProtection, generateToken, checkRegistrationFields, loginCheck } = require('../middleware/middleware');
 
 module.exports = server => {
@@ -17,7 +18,7 @@ function home(req, res){
 
 function register(req, res) {
     const user = req.body;
-    user.password = passwordProtection(user.password);
+    user.password = passwordProtection(user.password, res);
 
     userDb.register(user)
         .then(response => {
@@ -27,7 +28,7 @@ function register(req, res) {
         })
         .catch(err => {
             res.status(500).json({
-                message: "Unable to add new account."
+                message: `Unable to add new account: ${err}`
             })
         })
 }
@@ -39,9 +40,11 @@ function login(req, res) {
         .then(user => {
             if(bcrypt.compareSync(loginUser.password, user.password) === true){
                 const token = generateToken(user.username, user.id, user.role);
+
                 res.status(200).json({
                     message: 'Login successful',
-                    token: token
+                    token: token,
+                    user_id: user.id
                 })
             } else {
                 res.status(404).json({

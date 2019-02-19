@@ -1,11 +1,13 @@
 const userDb = require('../models/usersModel');
 const storyDb = require('../models/storiesModel');
 
+const {authenticate, verifyUser} = require('../middleware/middleware');
+
 module.exports = server => {
-    server.get('/donor/home', home);
-    server.get('/donor/:id', userProfile);
-    server.delete('/donor/:id', deleteUser);
-    server.put('/donor/:id', editUser)
+    server.get('/donor/home', authenticate, home);
+    server.get('/donor/:id', verifyUser, authenticate, userProfile);
+    server.delete('/donor/:id', verifyUser, authenticate, deleteUser);
+    server.put('/donor/:id', verifyUser, authenticate, editUser)
 }
 
 function home(req, res) {
