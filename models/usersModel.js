@@ -3,19 +3,8 @@ require("events").EventEmitter.defaultMaxListeners = 0
 
 const fetch = id => {
   return db("users")
-    .where("id", id)
-    .then(user => {
-      const userObj = {
-        id: user[0].id,
-        username: user[0].username,
-        email: user[0].email,
-        role: user[0].role,
-        country: user[0].country,
-        organization_title: user[0].organization_title,
-        created_at: user[0].created_at
-      }
-      return userObj
-    })
+    .where({ id })
+    .first()
 }
 
 const fetchCountry = id => {

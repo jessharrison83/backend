@@ -24,14 +24,12 @@ function home(req, res) {
 
 function register(req, res) {
   const user = req.body
-  user.password = passwordProtection(user.password, res)
-
+  const hash = bcrypt.hashSync(creds.password, 14) // rounds is 2^X
+  user.password = hash
   userDb
-    .register(user)
-    .then(response => {
-      res.status(201).json({
-        message: "Account created successfully!"
-      })
+    .insert(user)
+    .then(id => {
+      res.status(201).json(id)
     })
     .catch(err => {
       res.status(500).json({
@@ -44,7 +42,8 @@ function login(req, res) {
   const cred = req.body
 
   userDb
-    .login(cred.username)
+    .where({ username: cred.username })
+    .first()
     .then(user => {
       if (user && bcrypt.compareSync(cred.password, user.password)) {
         const token = generateToken(user)
