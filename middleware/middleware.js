@@ -32,32 +32,35 @@ generateToken = user => {
   const payload = {
     username: user.username,
     role: user.role,
-    user_id: user.id
+    id: user.id
   }
-  const secrets = jwtKey
+  const secret = process.env.JWT_SECRET
   const options = {
-    expiresIn: 3600
+    expiresIn: "1h"
   }
-  return jwt.sign(payload, secrets, options)
+  return jwt.sign(payload, secret, options)
 }
 
 authenticate = (req, res, next) => {
-  // const token = req.get("Authorization")
+  // token is normally sent in the authorization header
   const token = req.headers.authorization
   console.log(token)
   if (token) {
-    jwt.verify(token, jwtKey, (err, decoded) => {
+    // is it valid?
+    //veruft takes in a token, a secret and function to validate
+    jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
       if (err) {
-        return res.status(401).json(err)
+        // token is invalid
+        res.status(401).json({ message: "invalid token" })
       } else {
-        req.decoded = decoded
+        // token is valid
+        req.decodedToken = decodedToken
         next()
       }
     })
   } else {
-    return res.status(401).json({
-      error: "No token provided on the Authorization header"
-    })
+    // bounce
+    res.status(401).json({ message: "no token provided" })
   }
 }
 
