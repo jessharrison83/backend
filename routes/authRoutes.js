@@ -1,7 +1,7 @@
 const userDb = require("../models/usersModel")
 const storyDb = require("../models/storiesModel")
 const bcrypt = require("bcryptjs")
-
+const db = require("../data/dbConfig")
 const {
   passwordProtection,
   generateToken,
@@ -24,9 +24,9 @@ function home(req, res) {
 
 function register(req, res) {
   const user = req.body
-  const hash = bcrypt.hashSync(creds.password, 14) // rounds is 2^X
+  const hash = bcrypt.hashSync(user.password, 14) // rounds is 2^X
   user.password = hash
-  userDb
+  db("users")
     .insert(user)
     .then(id => {
       res.status(201).json(id)
@@ -41,7 +41,7 @@ function register(req, res) {
 function login(req, res) {
   const cred = req.body
 
-  userDb
+  db("users")
     .where({ username: cred.username })
     .first()
     .then(user => {
