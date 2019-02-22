@@ -101,7 +101,7 @@ verifyUser = (req, res, next) => {
 checkRegistrationFields = (req, res, next) => {
     const user = req.body;
 
-    if(user.username.length > 100){
+    if(!user.username || user.username.length > 100){
         return res.status(400).json({
             message: "Username cannot be longer than 100 characters."
         })
