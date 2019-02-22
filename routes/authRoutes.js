@@ -6,7 +6,7 @@ const { passwordProtection, generateToken, checkRegistrationFieldsloginCheck } =
 
 module.exports = server => {
     server.get('/', home)
-    server.post('/register', /*checkRegistrationFields,*/ register);
+    server.post('/register', checkRegistrationFields, register);
     server.post('/login', loginCheck, login);
 }
 
