@@ -2,12 +2,12 @@ const userDb = require('../models/usersModel');
 const storyDb = require('../models/storiesModel');
 const bcrypt = require('bcryptjs');
 
-const { passwordProtection, generateToken, checkRegistrationFields, loginCheck } = require('../middleware/middleware');
+const { passwordProtection, generateToken, checkRegistrationFieldsloginCheck } = require('../middleware/middleware');
 
 module.exports = server => {
     server.get('/', home)
     server.post('/register', /*checkRegistrationFields,*/ register);
-    server.post('/login', /*loginCheck,*/ login);
+    server.post('/login', loginCheck, login);
 }
 
 function home(req, res){
