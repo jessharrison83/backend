@@ -18,6 +18,5 @@ configDonorRoutes(server);
 configCoordRoutes(server);
 configAuthRoutes(server);
 
-const port = process.env.PORT || 3100;
 
-module.exports = server.listen(port)
+module.exports = server

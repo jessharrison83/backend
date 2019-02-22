@@ -21,7 +21,7 @@ describe('the route handlers', () => {
     });
 
 
-    describe('the auth route handlers', () => {
+    // describe('the auth route handlers', () => {
         
         // describe('/register endpoint', () => {
         //     //tests for character limits, non-unique values
@@ -53,46 +53,52 @@ describe('the route handlers', () => {
         //     })
         // })
 
-        describe('/login endpoint', () => {
+        // describe('/login endpoint', () => {
+
+        //     it('returns 200 status when successful', async () => {
+        //         const loginUser = {
+        //             username: 'nicholl',
+        //             password: 'password',
+        //         }
+        //         const success = await request(server).post('/login').send(loginUser)
+
+        //         expect(success.status).toBe(200)
+
+        //     })
+
+        //     it('returns 404 status when username or password is invalid', async () => {
+        //         const loginUser = {
+        //             username: 'grabjkelg',
+        //             password: 'password',
+        //         }
+        //         const fail = await request(server).post('/login').send(loginUser)
+
+        //         expect(fail.status).toBe(500)
+        //     })   
+        // })
+    
+    // })
+    
+    describe('the coord route handlers', () => {
+
+        describe('get /coord/:id endpoint', () => {
 
             it('returns 200 status when successful', async () => {
-                const loginUser = {
-                    username: 'nicholl',
-                    password: 'password',
-                }
-                const success = await request(server).post('/login').send(loginUser)
-
+                const success = await request(server).get('/coord/1')
                 expect(success.status).toBe(200)
-
             })
 
-            it('returns 404 status when username or password is invalid', async () => {
-                const loginUser = {
-                    username: 'grabjkelg',
-                    password: 'password',
-                }
-                const fail = await request(server).post('/login').send(loginUser)
+            it('returns the correct response', async () => {
+                const success = await request(server).get('/coord/1')
+                
+                expect(success.body.username).toBe('nicholl')
+                expect(success.body.email).toBe('Nicholl.OblitasCosta@p3foundation.org')
+                expect(success.body.role).toBe('Coordinator')
+                expect(success.body.country).toBe('Kiribati')
+                expect(success.body.organization_title).toBe('CEO')
+            })
 
-                expect(fail.status).toBe(500)
-            })   
         })
-    
-    })
-
-    
-    // describe('the coord route handlers', () => {
-
-    //     describe('get /coord/:id endpoint', () => {
-
-    //         it('returns 200 status when successful', async () => {
-
-    //         })
-
-    //         it('returns the correct response', async () => {
-
-    //         })
-            
-    //     })
 
 
     //     describe('post /coord/:id endpoint', () => {
@@ -199,7 +205,7 @@ describe('the route handlers', () => {
             
     //     })
         
-    // })
+    })
     
     // describe('the donor route handlers', () => {
 
