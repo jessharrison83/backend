@@ -4,11 +4,11 @@ const { checkIfUser, assignCountry, checkStoryFields, verifyUserauthenticate,oor
 
 module.exports = server => {
     server.get('/coord/:id/home', authenticate, coordAuth, home);
-    server.get('/coord/:id', authenticate, coordAuth, verifyUser, /*checkIfUser,*/ userProfile);
+    server.get('/coord/:id', authenticate, coordAuth, verifyUser, checkIfUser, userProfile);
     server.put('/coord/:id', coordAuth, verifyUser, /*checkRegistrationFields,*/ editUser);
     server.delete('/coord/:id', coordAuth, verifyUser, deleteUser);
     server.get('/story/:id', authenticate, story);
-    server.post('/coord/:id', verifyUser, coordAuth, /*checkStoryFields,*/ /*checkIfUser,*/ addStory);
+    server.post('/coord/:id', verifyUser, coordAuth, /*checkStoryFields,*/ checkIfUser, addStory);
     server.put('/story/:id', verifyUser, coordAuth, /*checkStoryFields,*/ editStory);
     server.delete('/story/:id', verifyUser, coordAuth, deleteStory);
 }
