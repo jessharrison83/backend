@@ -102,17 +102,19 @@ checkRegistrationFields = (req, res, next) => {
     const user = req.body;
 
     if(!user.username || user.username.length > 100){
-        return res.status(400).json({
-            message: "Username cannot be longer than 100 characters."
-        })
+        if(!user.username){
+            return res.status(400).json({
+                message: "New accounts require a username."
+            })
+        } else {
+            return res.status(400).json({
+                message: "Username cannot be longer than 100 characters."
+            })
+        }
     }
 
     if(user.username && user.password && user.email && user.role){
         next();
-    } else if(!user.username){
-        return res.status(400).json({
-            message: "New accounts require a username!"
-        })
     } else if(!user.password){
         return res.status(400).json({
             message: "New accounts require a password!"
