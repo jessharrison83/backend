@@ -29,11 +29,11 @@ loginCheck = (req, res, next) => {
     }
 }
 
-generateToken = (username, id, role) => {
+generateToken = (user) => {
     const payload = {
-        username: username,
-        role: role,
-        user_id: id,
+        username: user.username,
+        role: user.role,
+        user_id: user.id,
     }
 
     const options = {

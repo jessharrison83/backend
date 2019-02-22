@@ -39,7 +39,7 @@ function login(req, res) {
     userDb.login(loginUser.username)
         .then(user => {
             if(bcrypt.compareSync(loginUser.password, user.password) === true){
-                const token = generateToken(user.username, user.id, user.role);
+                const token = generateToken(user);
 
                 res.status(200).json({
                     message: 'Login successful',
