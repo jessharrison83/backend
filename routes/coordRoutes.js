@@ -9,8 +9,8 @@ module.exports = server => {
     server.delete('/coord/:id', coordAuth, verifyUser, deleteUser);
     server.get('/story/:id', authenticate, story);
     server.post('/coord/:id', verifyUser, coordAuth, checkStoryFields, checkIfUser, addStory);
-    server.put('/story/:id', verifyUser, coordAuth, checkStoryFields, editStory);
-    server.delete('/story/:id', verifyUser, coordAuth, deleteStory);
+    server.put('/story/:id', coordAuth, checkStoryFields, editStory);
+    server.delete('/story/:id', coordAuth, deleteStory);
 }
 
 function home(req, res) {
