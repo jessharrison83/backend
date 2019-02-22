@@ -1,16 +1,16 @@
 const userDb = require('../models/usersModel');
 const storyDb = require('../models/storiesModel');
-const { checkIfUser, assignCountry, checkStoryFields, checkRegistrationFields } = require('../middleware/middleware');
+const { checkIfUser, assignCountry, checkStoryFields, verifyUserauthenticate,oordAuth, checkRegistrationFields } = require('../middleware/middleware');
 
 module.exports = server => {
-    server.get('/coord/:id/home', home);
-    server.get('/coord/:id', checkIfUser, userProfile);
-    server.put('/coord/:id', checkRegistrationFields, editUser);
-    server.delete('/coord/:id', deleteUser);
-    server.get('/story/:id', story);
-    server.post('/coord/:id', checkStoryFields, addStory);
-    server.put('/story/:id', checkStoryFields, editStory);
-    server.delete('/story/:id', deleteStory);
+    server.get('/coord/:id/home', authenticate, coordAuth, home);
+    server.get('/coord/:id', authenticate, coordAuth, verifyUser, checkIfUser, userProfile);
+    server.put('/coord/:id', coordAuth, verifyUser, checkRegistrationFields, editUser);
+    server.delete('/coord/:id', coordAuth, verifyUser, deleteUser);
+    server.get('/story/:id', authenticate, story);
+    server.post('/coord/:id', verifyUser, coordAuth, checkStoryFields, checkIfUser, addStory);
+    server.put('/story/:id', verifyUser, coordAuth, checkStoryFields, editStory);
+    server.delete('/story/:id', verifyUser, coordAuth, deleteStory);
 }
 
 function home(req, res) {
@@ -28,7 +28,16 @@ function home(req, res) {
 }
 
 function userProfile(req, res) {
-    return req.body
+    const {id} = req.params;
+    userDb.fetch(id)
+        .then(user =>{
+            return res.json(user)
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "This user could not be fetched"
+            })
+        })
 }
 
 function editUser(req, res) {
@@ -119,13 +128,14 @@ function addStory(req, res) {
     const {id} = req.params;
     const story = req.body;
 
-    assignCountry(id)
+    assignCountry(id, res)
         .then(response => {
             const newPost = {
                 title: story.title,
                 description: story.description,
                 country: response.country,
-                image: response.image,
+                small_image: response.small_image,
+                large_image: response.large_image,
                 user_id: id
             }
             storyDb.add(newPost)
@@ -137,6 +147,9 @@ function addStory(req, res) {
                         message: "Unable to add story."
                     })
                 })
+        })
+        .catch(err => {
+            res.status(401).json(err)
         })
 }
 

@@ -1,26 +1,120 @@
 const bcrypt = require('bcryptjs');
 const userDb = require('../models/usersModel');
+const jwt = require('jsonwebtoken');
 
+const jwtKey = process.env.JWT_SECRET || `add a .env file to the root of the project with a JWT_SECRET variable`;
+
+
+//AUTHENTICATION
+
+passwordProtection = (password, res) => {
+    if(password.length > 11){
+        hashed = bcrypt.hashSync(password, 12);
+        return hashed;
+    } else {
+        return res.status(401).json({
+            message: "Password must be at least 12 characters long."
+        })
+    }
+}
+
+loginCheck = (req, res, next) => {
+    const user = req.body;
+    if(user.username && user.password){
+        next();
+    } else {
+        res.status(400).json({
+            message: "Invalid username or password."
+        })
+    }
+}
+
+generateToken = (user) => {
+    const payload = {
+        username: user.username,
+        role: user.role,
+        user_id: user.id,
+    }
+
+    const options = {
+        expiresIn: '3h'
+    }
+
+    return jwt.sign(payload, jwtKey, options)
+}
+
+authenticate = (req, res, next) => {
+    const token = req.get('Authorization');
+
+    if(token){
+        jwt.verify(token, jwtKey, (err, decoded) => {
+            if(err) return res.status(401).json(err);
+
+            req.decoded = decoded;
+            next();
+        })
+    } else {
+        return res.status(401).json({
+            error: "No token provided on the Authorization header"
+        })
+    }
+}
+
+coordAuth = (req, res, next) => {
+    const token = req.get('Authorization');
+    jwt.verify(token, jwtKey, (err, success) => {
+        if(err){
+            return res.status(401).json(err)
+        } else {
+            if(success.role === "Coordinator"){
+                next();
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized request - only Coordinators can access this page."
+                })
+            }
+        }
+    })
+}
+
+verifyUser = (req, res, next) => {
+    const token = req.get('Authorization');
+    const {id} = req.params;
+    jwt.verify(token, jwtKey, (err, success) => {
+        if(err){
+            return res.status(401).json(err)
+        } else {
+            if(success.user_id == id){
+                next();
+            } else {
+                res.status(401).json({
+                    message: "Unauthorized request - users can only edit their own account."
+                })
+            }
+        }
+    })
+}
+
+
+//FIELD CHECKING
 
 checkRegistrationFields = (req, res, next) => {
     const user = req.body;
 
-    if(user.username.length > 100){
-        return res.status(400).json({
-            message: "Username cannot be longer than 100 characters."
-        })
-    } else if (user.organization_title.length > 100){
-        return res.status(400).json({
-            message: "Organization title cannot be longer than 100 characters."
-        })
-    } 
+    if(!user.username || user.username.length > 100){
+        if(!user.username){
+            return res.status(400).json({
+                message: "New accounts require a username."
+            })
+        } else {
+            return res.status(400).json({
+                message: "Username cannot be longer than 100 characters."
+            })
+        }
+    }
 
     if(user.username && user.password && user.email && user.role){
         next();
-    } else if(!user.username){
-        return res.status(400).json({
-            message: "New accounts require a username!"
-        })
     } else if(!user.password){
         return res.status(400).json({
             message: "New accounts require a password!"
@@ -40,39 +134,133 @@ checkRegistrationFields = (req, res, next) => {
     }
 }
 
+
+checkStoryFields = (req, res, next) => {
+    const story = req.body;
+    
+    if(story.title && story.description){
+        if(story.title.length > 250){
+            return res.status(400).json({
+                message: "Story title cannot be longer than 250 characters."
+            })
+        }
+        next();
+    } else if(!story.title){
+        return res.status(400).json({
+            message: "Stories require a title!"
+        })
+    } else if(!story.description){
+        return res.status(400).json({
+            message: "Stories require a description!"
+        })
+    } else{
+        return res.status(400).json({
+            message: "Stories require a title and description!"
+        })
+    }
+}
+
+
+//ASSIGN COUNTRY FIELD AND IMAGES
+
 assignImage = (country) => {
     let images = {
-        Bolivia: "https://drive.google.com/open?id=1aMuMlXFFFxePgGCsUpye67mudLM_8tl7",
-        Brazil: "https://drive.google.com/open?id=1TrHE-f1i4AvBZazKANZ4xH63wdsDmErc",
-        Cambodia: "https://drive.google.com/open?id=12wcbodtfxIqarMxZeJJ0X9y1IwzaOgcP",
-        Colombia: "https://drive.google.com/open?id=17L-m2nsU2MXGn3Qomfno-gfJR0UaHWRL",
-        Ecuador: "https://drive.google.com/open?id=1QIuAhrGzy6c5ceh8A3xXQNBVRG92Doph",
-        El_Salvador: "https://drive.google.com/open?id=1Buf2DFCuHFxnLV2SK_pkbEwdVRFPZ_kn",
-        Ghana: "https://drive.google.com/open?id=1AGgnB4JaAJC1V7s01OJ6MxEqlq9Hcrdt",
-        Guatemala: "https://drive.google.com/open?id=1k-bXKtJrT64P86KYpJvlH1MJa_Nc6bnE",
-        Haiti: "https://drive.google.com/open?id=1vaQQVZoKEpgGRi9ZNpkQYQwOEEhh8od-",
-        Honduras: "https://drive.google.com/open?id=1lyCwxFDtlgZdLh_7bxQLC115qYmX3pfE",
-        Kiribati: "https://drive.google.com/open?id=1MjfLSz9N0DE2lzn-Lrkd_btMx0LqZknA",
-        Madagascar: "https://drive.google.com/open?id=15ef_zSCaDluIucYxFnzxqNIZ00Xl9QNO",
-        Mongolia: "https://drive.google.com/open?id=1cIkuyE9Jpp1OcF-bBarIv5Er4Vek-JIA",
-        Nicaragua: "https://drive.google.com/open?id=19kJvvpf6pWGGNjh_xgaFH9lBx8aMbKaE",
-        Paraguay: "https://drive.google.com/open?id=1GpAAzecZlmS2b2s-xEaYJasSVfdaxIIO",
-        Peru: "https://drive.google.com/open?id=1uV30_SQH-gqUhT1ulPBoitxHvARMP79z",
-        Philippines: "https://drive.google.com/open?id=1_IL8-PO-NwMome1zzP_4sBgVyOEHaWCc",
-        Sierra_Leone: "https://drive.google.com/open?id=1RI1kI5zgNavStGIClzLJ4S8gr2ULlh-y",
-        Zimbabwe: "https://drive.google.com/open?id=1FdtRvySOD9LgiC724ERv6I3X1mTwbJi-"
+        Bolivia: { 
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Bolivia.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/Bolivia.jpg"
+        },
+        Brazil: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Brazil.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/Brazil.jpg"
+        },
+        Cambodia: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Cambodia.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Cambodia.jpg"
+        },
+        Colombia: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Colombia.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Colombia.jpg"
+        },
+        Ecuador: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Ecuador.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Ecuador.jpg"
+        },
+        El_Salvador: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/El_Salvador.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/El_Salvador.jpg"
+        },
+        Ghana: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Ghana.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/Ghana.jpg"
+        },
+        Guatemala: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Guatemala.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Guatemala.jpg"
+        },
+        Haiti: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Haiti.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Haiti.jpg"
+        },
+        Honduras: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Honduras.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Honduras.jpg"
+        },
+        Kiribati: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Kiribati.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438987/Large%20Bountiful/Kiribati.jpg"
+        },
+        Madagascar: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Madagascar.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Madagascar.jpg"
+        },
+        Mongolia: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Mongolia.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438986/Large%20Bountiful/Mongolia.jpg"
+        },
+        Nicaragua: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Nicaragua.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Nicaragua.jpg"
+        },
+        Paraguay: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Paraguay.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Paraguay.jpg"
+        },
+        Peru: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Peru.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Peru.jpg"
+        },
+        Philippines: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340096/Philippines.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438985/Large%20Bountiful/Philippines.jpg"
+        },
+        Sierra_Leone: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Sierra_Leone.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438987/Large%20Bountiful/Sierra_Leone.jpg"
+        },
+        Zimbabwe: {
+            small: "https://res.cloudinary.com/divjebnjg/image/upload/v1550340095/Zimbabwe.jpg",
+            large: "https://res.cloudinary.com/divjebnjg/image/upload/v1550438992/Large%20Bountiful/Zimbabwe.jpg"
+        }
     }
-
     return images[country]
 }
 
-async function assignCountry(id) {
+async function assignCountry(id, res) {
     const countryString = await userDb.fetchCountry(id)
-    const imageurl = assignImage(countryString)
-
-    return {country: countryString, image: imageurl}
+    if(!countryString){
+        return res.status(401).json({
+            message: "This user does not have an assigned country, so cannot post stories."
+        })
+    }
+    const imageObj = assignImage(countryString)
+    return {
+        country: countryString, 
+        small_image: imageObj.small, 
+        large_image: imageObj.large}
 }
 
+
+//VERIFY USER EXISTS
 
 checkIfUser = (req, res, next) => {
     const {id} = req.params;
@@ -80,7 +268,7 @@ checkIfUser = (req, res, next) => {
     userDb.fetch(id)
     .then(user => {
         if(user){
-            return res.json(user)
+            next()
         } else {
             return res.status(404).json({
                 message: "This user does not exist."
@@ -94,49 +282,6 @@ checkIfUser = (req, res, next) => {
     })
 }
 
-checkStoryFields = (req, res, next) => {
-    const story = req.body;
-    //title, description
-    if(story.title && story.description){
-        next();
-    } else if(story.title){
-        return res.status(400).json({
-            message: "Stories require a description!"
-        })
-    } else if(story.description){
-        return res.status(400).json({
-            message: "Stories require a title!"
-        })
-    } else{
-        return res.status(400).json({
-            message: "Stories require a title and description!"
-        })
-    }
-}
-
-passwordProection = (password) => {
-    if(password.length > 11){
-        hashed = bcrypt.hashSync(password, 12);
-        return hashed;
-    } else {
-        return res.status(400).json({
-            message: "Password must be at least 12 characters long."
-        })
-    }
-}
-
-loginCheck = (req, res, next) => {
-    const user = req.body;
-    if(user.username && user.password){
-        next();
-    } else {
-        res.status(400).json({
-            message: "Invalid username or password."
-        })
-    }
-}
-
-
 module.exports = {
-    checkRegistrationFields, checkStoryFields, passwordProection, loginCheck, assignCountry, checkIfUser
+    checkRegistrationFields, checkStoryFields, passwordProtection, loginCheck, assignCountry, checkIfUser, authenticate, generateToken, coordAuth, verifyUser
 }

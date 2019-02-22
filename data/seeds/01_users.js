@@ -1,3 +1,6 @@
+const bcrypt = require('bcryptjs');
+
+// {username: 'user', password: bcrypt.hashSync('password', 16), email: 'user@test.com'}
 
 exports.seed = function(knex, Promise) {
   return knex('users').truncate()
