@@ -6,8 +6,8 @@ const { passwordProtection, generateToken, checkRegistrationFields, loginCheck }
 
 module.exports = server => {
     server.get('/', home)
-    server.post('/register', checkRegistrationFields, register);
-    server.post('/login', loginCheck, login);
+    server.post('/register', /*checkRegistrationFields,*/ register);
+    server.post('/login', /*loginCheck,*/ login);
 }
 
 function home(req, res){
@@ -18,7 +18,8 @@ function home(req, res){
 
 function register(req, res) {
     const user = req.body;
-    user.password = passwordProtection(user.password, res);
+    // user.password = passwordProtection(user.password, res);
+    user.password = bcrypt.hashSync(password, 12);
 
     userDb.register(user)
         .then(response => {

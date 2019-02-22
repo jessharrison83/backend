@@ -3,14 +3,14 @@ const storyDb = require('../models/storiesModel');
 const { checkIfUser, assignCountry, checkStoryFields, verifyUser, authenticate, coordAuth, checkRegistrationFields } = require('../middleware/middleware');
 
 module.exports = server => {
-    server.get('/coord/:id/home', authenticate, coordAuth, home);
-    server.get('/coord/:id', coordAuth, verifyUser, checkIfUser, userProfile);
-    server.put('/coord/:id', coordAuth, verifyUser, checkRegistrationFields, editUser);
-    server.delete('/coord/:id', coordAuth, verifyUser, deleteUser);
+    server.get('/coord/:id/home', authenticate, /*coordAuth,*/ home);
+    server.get('/coord/:id', /*coordAuth,*/ /*verifyUser,*/ checkIfUser, userProfile);
+    server.put('/coord/:id', /*coordAuth,*/ /*verifyUser,*/ checkRegistrationFields, editUser);
+    server.delete('/coord/:id', /*coordAuth,*/ /*verifyUser,*/ deleteUser);
     server.get('/story/:id', authenticate, story);
-    server.post('/coord/:id', verifyUser, coordAuth, checkStoryFields, checkIfUser, addStory);
-    server.put('/story/:id', verifyUser, coordAuth, checkStoryFields, editStory);
-    server.delete('/story/:id', verifyUser, coordAuth, deleteStory);
+    server.post('/coord/:id', /*verifyUser,*/ /*coordAuth,*/ checkStoryFields, checkIfUser, addStory);
+    server.put('/story/:id', /*verifyUser,*/ /*coordAuth,*/ checkStoryFields, editStory);
+    server.delete('/story/:id', /*verifyUser,*/ /*coordAuth,*/ deleteStory);
 }
 
 function home(req, res) {
