@@ -19,7 +19,7 @@ function home(req, res){
 function register(req, res) {
     const user = req.body;
     // user.password = passwordProtection(user.password, res);
-    user.password = bcrypt.hashSync(password, 12);
+    user.password = bcrypt.hashSync(user.password, 12);
 
     userDb.register(user)
         .then(response => {
