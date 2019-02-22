@@ -8,8 +8,8 @@ module.exports = server => {
     server.put('/coord/:id', coordAuth, verifyUser, checkRegistrationFields, editUser);
     server.delete('/coord/:id', coordAuth, verifyUser, deleteUser);
     server.get('/story/:id', authenticate, story);
-    server.post('/coord/:id', verifyUser, coordAuth, /*checkStoryFields,*/ checkIfUser, addStory);
-    server.put('/story/:id', verifyUser, coordAuth, /*checkStoryFields,*/ editStory);
+    server.post('/coord/:id', verifyUser, coordAuth, checkStoryFields, checkIfUser, addStory);
+    server.put('/story/:id', verifyUser, coordAuth, checkStoryFields, editStory);
     server.delete('/story/:id', verifyUser, coordAuth, deleteStory);
 }
 
