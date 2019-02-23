@@ -14,6 +14,7 @@
 - Give Donors the ability to find local charities for more direct impact
 - Help Donors see the impact of their donations over time with story updates
 
+
 ## How to install and Run?
 
 Bountiful requires you to create your own environmental files and variables to run.
