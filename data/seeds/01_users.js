@@ -1,14 +1,12 @@
 const bcrypt = require('bcryptjs');
 
-// {username: 'user', password: bcrypt.hashSync('password', 16), email: 'user@test.com'}
-
 exports.seed = function(knex, Promise) {
   return knex('users').truncate()
     .then(function () {
       return knex('users').insert([
         {
             username: 'nicholl',
-            password: 'rHUnhgFbkGRLNVyX',
+            password: bcrypt.hashSync('password', 12),
             email: 'Nicholl.OblitasCosta@p3foundation.org',
             role: 'Coordinator',
             country: 'Kiribati',
@@ -16,7 +14,7 @@ exports.seed = function(knex, Promise) {
         },
         {
             username: 'rhett',
-            password: 'wwJnkvZsAYQVJwTQ',
+            password: bcrypt.hashSync('password', 12),
             email: 'rhett@wildmadagascar.org',
             role: 'Coordinator',
             country: 'Madagascar',
@@ -24,7 +22,7 @@ exports.seed = function(knex, Promise) {
         },
         {
             username: 'a.dodson',
-            password: 'QCJQZstjnXUqnjNB',
+            password: bcrypt.hashSync('password', 12),
             email: 'ana@peruvianhearts.org',
             role: 'Coordinator',
             country: 'Peru',
@@ -32,19 +30,19 @@ exports.seed = function(knex, Promise) {
         },
         {
             username: 'wholeearthgirl',
-            password: 'MXpsXRzytLdVRGxw',
+            password: bcrypt.hashSync('password', 12),
             email: 'vegangoddess116@yahoo.com',
             role: 'Donor'
         },
         {
             username: 'lucysmith',
-            password: 'eeNtgXmnPWWeKFdv',
+            password: bcrypt.hashSync('password', 12),
             email: 'lucysmith@gmail.com',
             role: 'Donor'
         },
         {
             username: 'orion',
-            password: 'wLhXKDfzcuDLMePn',
+            password: bcrypt.hashSync('password', 12),
             email: 'orion@goodhandshelp.org',
             role: 'Donor'
         },

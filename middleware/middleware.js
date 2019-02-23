@@ -44,55 +44,67 @@ generateToken = (user) => {
 }
 
 authenticate = (req, res, next) => {
-    const token = req.get('Authorization');
-
-    if(token){
-        jwt.verify(token, jwtKey, (err, decoded) => {
-            if(err) return res.status(401).json(err);
-
-            req.decoded = decoded;
-            next();
-        })
+    if (process.env.DB_ENV == "testing") {
+        next();
     } else {
-        return res.status(401).json({
-            error: "No token provided on the Authorization header"
-        })
+        const token = req.get('Authorization');
+
+        if(token){
+            jwt.verify(token, jwtKey, (err, decoded) => {
+                if(err) return res.status(401).json(err);
+
+                req.decoded = decoded;
+                next();
+            })
+        } else {
+            return res.status(401).json({
+                error: "No token provided on the Authorization header"
+            })
+        }
     }
 }
 
 coordAuth = (req, res, next) => {
-    const token = req.get('Authorization');
-    jwt.verify(token, jwtKey, (err, success) => {
-        if(err){
-            return res.status(401).json(err)
-        } else {
-            if(success.role === "Coordinator"){
-                next();
+    if (process.env.DB_ENV == "testing") {
+        next();
+    } else {
+        const token = req.get('Authorization');
+        jwt.verify(token, jwtKey, (err, success) => {
+            if(err){
+                return res.status(401).json(err)
             } else {
-                res.status(401).json({
-                    message: "Unauthorized request - only Coordinators can access this page."
-                })
+                if(success.role === "Coordinator"){
+                    next();
+                } else {
+                    res.status(401).json({
+                        message: "Unauthorized request - only Coordinators can access this page."
+                    })
+                }
             }
-        }
-    })
+        })
+    }
 }
 
 verifyUser = (req, res, next) => {
-    const token = req.get('Authorization');
-    const {id} = req.params;
-    jwt.verify(token, jwtKey, (err, success) => {
-        if(err){
-            return res.status(401).json(err)
-        } else {
-            if(success.user_id == id){
-                next();
+    if (process.env.DB_ENV == "testing") {
+        next();
+    } else { 
+        const token = req.get('Authorization');
+        const {id} = req.params;
+        jwt.verify(token, jwtKey, (err, success) => {
+            if(err){
+                return res.status(401).json(err)
             } else {
-                res.status(401).json({
-                    message: "Unauthorized request - users can only edit their own account."
-                })
+                if(success.user_id == id){
+                    next();
+                } else {
+                    res.status(401).json({
+                        message: "Unauthorized request - users can only edit their own account."
+                    })
+                }
             }
-        }
-    })
+        })
+    }
 }
 
 
@@ -103,7 +115,7 @@ checkRegistrationFields = (req, res, next) => {
 
     if(!user.username || user.username.length > 100){
         if(!user.username){
-            return res.status(400).json({
+            return res.status(422).json({
                 message: "New accounts require a username."
             })
         } else {
@@ -116,19 +128,19 @@ checkRegistrationFields = (req, res, next) => {
     if(user.username && user.password && user.email && user.role){
         next();
     } else if(!user.password){
-        return res.status(400).json({
+        return res.status(422).json({
             message: "New accounts require a password!"
         })
     } else if(!user.email){
-        return res.status(400).json({
+        return res.status(422).json({
             message: "New accounts require an email address!"
         })
     } else if(!user.role){
-        return res.status(400).json({
+        return res.status(422).json({
             message: "New accounts require a role!"
         })
     } else{
-        return res.status(400).json({
+        return res.status(422).json({
             message: "New accounts require a username, password, email and role!"
         })
     }

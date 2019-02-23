@@ -8,11 +8,12 @@
 
 - Bountiful is a story telling platform that allows Coordinators of local charities to share their organization's efforts, and Donors from around the world to support programs.
 
-## Why is it needed?
+## Motivation?
 
-- Allows Coordinators of programs to focus on running their charity well, rather than spending time and energy marketing for donations
-- Gives Donors the ability to find local charities for more direct impact
-- Helps Donors see the impact of their donations over time with story updates
+- Allow Coordinators of programs to focus on running their charity well, rather than spending time and energy marketing for donations
+- Give Donors the ability to find local charities for more direct impact
+- Help Donors see the impact of their donations over time with story updates
+
 
 ## How to install and Run?
 

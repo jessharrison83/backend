@@ -18,6 +18,5 @@ configDonorRoutes(server);
 configCoordRoutes(server);
 configAuthRoutes(server);
 
-module.exports = {
-  server,
-};
+
+module.exports = server

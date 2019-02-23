@@ -8,8 +8,7 @@ exports.up = function(knex, Promise) {
       table.string('updated_at').notNullable().defaultTo(knex.fn.now());
       table.string('small_image').notNullable();
       table.string('large_image').notNullable();
-      table.integer('user_id').unsigned();
-      table.foreign('user_id').references('id').on('users');
+      table.integer('user_id').unsigned().references('id').inTable('users');
   })
 };
 
