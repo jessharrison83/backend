@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const { server } = require("./api/server.js");
+const server = require("./api/server.js");
 
 const port = process.env.PORT || 3100;
 const { Client } = require("pg");
